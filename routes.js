@@ -22,13 +22,19 @@ router.post("/links", function (req, res) {
     req.checkBody("title", "You must include a title.").notEmpty();
     req.checkBody("url", "Your URL is invalid.").isURL();
 
+    const linkData = {
+        title: req.body.title,
+        url: req.body.url,
+        descr: req.body.descr
+    };
+
     req.getValidationResult().then(function (result) {
         if (result.isEmpty()) {
-            models.Link.create(req.body).then(function (link) {
+            models.Link.create(linkData).then(function (link) {
                 res.redirect("/");
             });
         } else {
-            const link = models.Link.build(req.body)
+            const link = models.Link.build(linkData);
             res.render("links_create", {errors: result.array(), link: link})
         }
     })
