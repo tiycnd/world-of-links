@@ -5,3 +5,7 @@
 .link {
     margin-bottom: 1rem;
 }
+
+.delete-link-form {
+    display: inline-block;
+}

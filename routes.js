@@ -112,7 +112,15 @@ router.post("/links/:linkId", function (req, res) {
 
 // delete action for link
 router.post("/links/:linkId/delete", function (req, res) {
-    res.send("delete a link");
+    models.Link.findById(req.params.linkId).then(function (link) {
+        if (link) {
+            link.destroy().then(function () {
+                res.redirect("/");
+            })
+        } else {
+            res.status(404).send('Not found.');
+        }
+    })
 });
 
 module.exports = router;

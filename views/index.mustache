@@ -4,7 +4,8 @@
 <div class="link">
     <div>
         <a href="/links/{{id}}">{{title}}</a> - <span class="text-muted">{{clicks}} clicks</span>
-        <span class="small"><a href="/links/{{id}}/edit">edit</a></span>
+        <a class="btn btn-sm btn-outline-primary" href="/links/{{id}}/edit">edit</a>
+        <form class="delete-link-form" method="POST" action="/links/{{id}}/delete"><button class="btn btn-sm btn-outline-danger" type="submit">delete</a>
     </div>
     {{#descr}}<div class="small">{{.}}</div>{{/descr}}
 </div>
