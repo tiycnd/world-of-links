@@ -35,7 +35,8 @@ router.post("/links", function (req, res) {
             });
         } else {
             const link = models.Link.build(linkData);
-            res.render("links_create", {errors: result.array(), link: link})
+            const errors = result.mapped();
+            res.render("links_create", {errors: errors, link: link})
         }
     })
 });

@@ -9,17 +9,26 @@
         {{/errors.0}}
 
         <form method="POST" action="/links">
-            <div class="form-group">
+            <div class="form-group {{#errors.title}}has-danger{{/errors.title}}">
                 <label for="title">Title</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{link.title}}" />
+                {{#errors.title}}
+                <div class="form-control-feedback">{{msg}}</div>
+                {{/errors.title}}
             </div>
-            <div class="form-group">
+            <div class="form-group {{#errors.url}}has-danger{{/errors.url}}">
                 <label for="url">URL</label>
                 <input type="url" class="form-control" id="url" name="url" value="{{link.url}}" />
+                {{#errors.url}}
+                <div class="form-control-feedback">{{msg}}</div>
+                {{/errors.url}}
             </div>
-            <div class="form-group">
+            <div class="form-group {{#errors.descr}}has-danger{{/errors.descr}}">
                 <label for="descr">Descr</label>
                 <textarea class="form-control" id="descr" name="descr">{{link.descr}}</textarea>
+                {{#errors.descr}}
+                <div class="form-control-feedback">{{msg}}</div>
+                {{/errors.descr}}
             </div>
             <button type="submit" class="btn btn-primary">Create link</button>
         </form>
