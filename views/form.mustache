@@ -8,7 +8,7 @@
         </div>
         {{/errors.0}}
 
-        <form method="POST" action="/links">
+        <form method="POST" action="{{#action}}{{.}}{{/action}}{{^action}}/links{{/action}}">
             <div class="form-group {{#errors.title}}has-danger{{/errors.title}}">
                 <label for="title">Title</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{link.title}}" /> {{#errors.title}}
