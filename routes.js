@@ -8,18 +8,30 @@ router.get("/", function (req, res) {
 
 router.get("/links", function (req, res) {
     models.Link.findAll().then(function (links) {
-        res.render("index", {links: links});
+        res.render("index", {
+            links: links
+        });
     });
 });
 
 router.get("/links/create", function (req, res) {
-   res.render("links_create");
+    res.render("links_create");
 })
 
 router.post("/links", function (req, res) {
-    models.Link.create(req.body).then(function (link) {
-        res.redirect("/");
-    });
+    req.checkBody("title", "You must include a title.").notEmpty();
+    req.checkBody("url", "Your URL is invalid.").isURL();
+
+    req.getValidationResult().then(function (result) {
+        if (result.isEmpty()) {
+            models.Link.create(req.body).then(function (link) {
+                res.redirect("/");
+            });
+        } else {
+            const link = models.Link.build(req.body)
+            res.render("links_create", {errors: result.array(), link: link})
+        }
+    })
 });
 
 router.get("/links/:linkId", function (req, res) {
