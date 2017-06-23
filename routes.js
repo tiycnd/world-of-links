@@ -3,7 +3,9 @@ const router = express.Router();
 const models = require("./models");
 
 router.get("/", function (req, res) {
-    res.send("list of links");
+    models.Link.findAll().then(function (links) {
+        res.render("index", {links: links});
+    });
 });
 
 router.post("/", function (req, res) {
