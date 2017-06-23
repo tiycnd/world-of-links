@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const mustacheExpress = require('mustache-express');
 const bodyParser = require("body-parser");
+const expressValidator = require("express-validator");
 const morgan = require("morgan");
 const routes = require("./routes");
 
@@ -15,6 +16,7 @@ app.set('layout', 'layout');
 app.use('/static', express.static('static'));
 
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(expressValidator());
 app.use(morgan('dev'))
 
 app.use(routes);
