@@ -6,6 +6,7 @@ router.get("/", function (req, res) {
     res.redirect("/links");
 })
 
+// index of all links
 router.get("/links", function (req, res) {
     models.Link.findAll().then(function (links) {
         res.render("index", {
@@ -14,10 +15,12 @@ router.get("/links", function (req, res) {
     });
 });
 
+// create form for link
 router.get("/links/create", function (req, res) {
-    res.render("links_create");
+    res.render("form");
 })
 
+// create action for link
 router.post("/links", function (req, res) {
     req.checkBody("title", "You must include a title.").notEmpty();
     req.checkBody("url", "Your URL is invalid.").isURL();
@@ -41,15 +44,25 @@ router.post("/links", function (req, res) {
     })
 });
 
+// view link
 router.get("/links/:linkId", function (req, res) {
     res.send("go to a link");
 });
 
+// edit form for link
+router.get("/links/:linkId/edit", function (req, res) {
+    models.Link.findById(req.params.linkId).then(function (link) {
+        res.render("form", {link: link, buttonText: "Update link"});
+    })
+})
+
+// edit action for link
 router.post("/links/:linkId", function (req, res) {
     res.send("edit a link");
 });
 
-router.delete("/links/:linkId", function (req, res) {
+// delete action for link
+router.post("/links/:linkId/delete", function (req, res) {
     res.send("delete a link");
 });
 
