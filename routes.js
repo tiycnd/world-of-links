@@ -47,37 +47,36 @@ router.post("/links", function (req, res) {
     })
 });
 
-// view link
-router.get("/links/:linkId", function (req, res) {
+const getLink = function (req, res, next) {
     models.Link.findById(req.params.linkId).then(function (link) {
         if (link) {
-            link.clicks += 1;
-            link.save().then(function () {
-                res.redirect(link.url);
-            });
-        } else {
-            res.status(404).send('Not found.');
-        }
-    });
-});
-
-// edit form for link
-router.get("/links/:linkId/edit", function (req, res) {
-    models.Link.findById(req.params.linkId).then(function (link) {
-        if (link) {
-            res.render("form", {
-                link: link,
-                action: "/links/" + link.id,
-                buttonText: "Update link"
-            });
+            req.link = link;
+            next();
         } else {
             res.status(404).send('Not found.');
         }
     })
+}
+
+// view link
+router.get("/links/:linkId", getLink, function (req, res) {
+    req.link.clicks += 1;
+    req.link.save().then(function () {
+        res.redirect(link.url);
+    });
+});
+
+// edit form for link
+router.get("/links/:linkId/edit", getLink, function (req, res) {
+    res.render("form", {
+        link: req.link,
+        action: "/links/" + req.link.id,
+        buttonText: "Update link"
+    });
 })
 
 // edit action for link
-router.post("/links/:linkId", function (req, res) {
+router.post("/links/:linkId", getLink, function (req, res) {
     req.checkBody("title", "You must include a title.").notEmpty();
     req.checkBody("url", "Your URL is invalid.").isURL();
 
@@ -87,40 +86,28 @@ router.post("/links/:linkId", function (req, res) {
         descr: req.body.descr
     };
 
-    models.Link.findById(req.params.linkId).then(function (link) {
-        if (link) {
-            req.getValidationResult().then(function (result) {
-                if (result.isEmpty()) {
-                    link.update(linkData).then(function (newLink) {
-                        res.redirect("/");
-                    });
-                } else {
-                    const errors = result.mapped();
-                    res.render("form", {
-                        link: linkData,
-                        errors: errors,
-                        action: "/links/" + link.id,
-                        buttonText: "Update link"
-                    });
-                }
+    req.getValidationResult().then(function (result) {
+        if (result.isEmpty()) {
+            req.link.update(linkData).then(function (newLink) {
+                res.redirect("/");
             });
         } else {
-            res.status(404).send('Not found.');
+            const errors = result.mapped();
+            res.render("form", {
+                link: linkData,
+                errors: errors,
+                action: "/links/" + req.link.id,
+                buttonText: "Update link"
+            });
         }
-    })
+    });
 });
 
 // delete action for link
-router.post("/links/:linkId/delete", function (req, res) {
-    models.Link.findById(req.params.linkId).then(function (link) {
-        if (link) {
-            link.destroy().then(function () {
-                res.redirect("/");
-            })
-        } else {
-            res.status(404).send('Not found.');
-        }
-    })
+router.post("/links/:linkId/delete", getLink, function (req, res) {
+    req.link.destroy().then(function () {
+        res.redirect("/");
+    });
 });
 
 module.exports = router;
