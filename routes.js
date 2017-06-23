@@ -8,6 +8,10 @@ router.get("/", function (req, res) {
     });
 });
 
+router.get("/links/create", function (req, res) {
+   res.render("links_create");
+})
+
 router.post("/", function (req, res) {
     res.send("make a link");
 });
