@@ -2,7 +2,10 @@
 <div class="col">
 {{#links}}
 <div class="link">
-    <div><a href="{{url}}">{{title}}</a> - <span class="text-muted">{{clicks}} clicks</span></div>
+    <div>
+        <a href="/links/{{id}}">{{title}}</a> - <span class="text-muted">{{clicks}} clicks</span>
+        <span class="small"><a href="/links/{{id}}/edit">edit</a></span>
+    </div>
     {{#descr}}<div class="small">{{.}}</div>{{/descr}}
 </div>
 {{/links}}

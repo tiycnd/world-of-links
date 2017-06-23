@@ -49,14 +49,22 @@ router.post("/links", function (req, res) {
 
 // view link
 router.get("/links/:linkId", function (req, res) {
-    res.send("go to a link");
+    models.Link.findById(req.params.linkId).then(function (link) {
+        if (link) {
+            link.clicks += 1;
+            link.save().then(function () {
+                res.redirect(link.url);
+            });
+        } else {
+            res.status(404).send('Not found.');
+        }
+    });
 });
 
 // edit form for link
 router.get("/links/:linkId/edit", function (req, res) {
     models.Link.findById(req.params.linkId).then(function (link) {
         if (link) {
-
             res.render("form", {
                 link: link,
                 action: "/links/" + link.id,
