@@ -52,7 +52,11 @@ router.get("/links/:linkId", function (req, res) {
 // edit form for link
 router.get("/links/:linkId/edit", function (req, res) {
     models.Link.findById(req.params.linkId).then(function (link) {
-        res.render("form", {link: link, buttonText: "Update link"});
+        if (link) {
+            res.render("form", {link: link, buttonText: "Update link"});
+        } else {
+            res.status(404).send('Not found.');
+        }
     })
 })
 
