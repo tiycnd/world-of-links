@@ -62,7 +62,7 @@ const getLink = function (req, res, next) {
 router.get("/links/:linkId", getLink, function (req, res) {
     req.link.clicks += 1;
     req.link.save().then(function () {
-        res.redirect(link.url);
+        res.redirect(req.link.url);
     });
 });
 
